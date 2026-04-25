@@ -35,7 +35,7 @@ const App = () => (
             <Route path="/weather" element={<Weather />} />
             <Route path="/admin" element={<AdminLogin />} />
           </Route>
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin/*" element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="destinations" element={<ManageDestinations />} />

@@ -14,16 +14,204 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      destinations: {
+        Row: {
+          best_time: string | null
+          city: string
+          created_at: string
+          description: string | null
+          entry_fee_foreigner: string | null
+          entry_fee_indian: string | null
+          id: string
+          image_url: string | null
+          name: string
+          rating: number
+          state: string
+          tags: string[] | null
+          timings: string | null
+          type: string
+        }
+        Insert: {
+          best_time?: string | null
+          city: string
+          created_at?: string
+          description?: string | null
+          entry_fee_foreigner?: string | null
+          entry_fee_indian?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          rating?: number
+          state: string
+          tags?: string[] | null
+          timings?: string | null
+          type: string
+        }
+        Update: {
+          best_time?: string | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          entry_fee_foreigner?: string | null
+          entry_fee_indian?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          rating?: number
+          state?: string
+          tags?: string[] | null
+          timings?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
+      hotels: {
+        Row: {
+          amenities: string[] | null
+          city: string
+          contact: string | null
+          created_at: string
+          id: string
+          name: string
+          near: string | null
+          price_per_night: number
+          rating: number
+          type: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          city: string
+          contact?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          near?: string | null
+          price_per_night: number
+          rating?: number
+          type: string
+        }
+        Update: {
+          amenities?: string[] | null
+          city?: string
+          contact?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          near?: string | null
+          price_per_night?: number
+          rating?: number
+          type?: string
+        }
+        Relationships: []
+      }
+      restaurants: {
+        Row: {
+          city: string
+          contact: string | null
+          created_at: string
+          cuisine: string
+          id: string
+          name: string
+          price_range: string
+          rating: number
+          specialty: string | null
+        }
+        Insert: {
+          city: string
+          contact?: string | null
+          created_at?: string
+          cuisine: string
+          id?: string
+          name: string
+          price_range: string
+          rating?: number
+          specialty?: string | null
+        }
+        Update: {
+          city?: string
+          contact?: string | null
+          created_at?: string
+          cuisine?: string
+          id?: string
+          name?: string
+          price_range?: string
+          rating?: number
+          specialty?: string | null
+        }
+        Relationships: []
+      }
+      transport: {
+        Row: {
+          cost_max: number
+          cost_min: number
+          created_at: string
+          duration: string
+          from_city: string
+          id: string
+          mode: string
+          operator: string | null
+          to_city: string
+        }
+        Insert: {
+          cost_max: number
+          cost_min: number
+          created_at?: string
+          duration: string
+          from_city: string
+          id?: string
+          mode: string
+          operator?: string | null
+          to_city: string
+        }
+        Update: {
+          cost_max?: number
+          cost_min?: number
+          created_at?: string
+          duration?: string
+          from_city?: string
+          id?: string
+          mode?: string
+          operator?: string | null
+          to_city?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +338,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

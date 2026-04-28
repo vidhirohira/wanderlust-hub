@@ -3,6 +3,7 @@ import type { Destination } from "@/lib/types";
 import { resolveImage } from "@/lib/images";
 import { typeColorClasses } from "@/lib/typeColor";
 import { cn } from "@/lib/utils";
+import { WishlistButton } from "./WishlistButton";
 
 type Props = {
   destination: Destination;
@@ -12,7 +13,7 @@ type Props = {
 export const DestinationCard = ({ destination: d, onClick }: Props) => (
   <button
     onClick={onClick}
-    className="group text-left bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-elegant transition-bounce hover:-translate-y-1 border border-border/60"
+    className="group text-left bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-elegant transition-bounce hover:-translate-y-1 border border-border/60 w-full"
   >
     <div className="relative aspect-[4/3] overflow-hidden bg-muted">
       <img
@@ -30,9 +31,12 @@ export const DestinationCard = ({ destination: d, onClick }: Props) => (
       >
         {d.type}
       </span>
-      <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-md text-xs font-bold shadow-soft">
-        <Star className="h-3 w-3 fill-accent text-accent" />
-        {d.rating}
+      <div className="absolute top-3 right-3 flex items-center gap-2">
+        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-md text-xs font-bold shadow-soft">
+          <Star className="h-3 w-3 fill-accent text-accent" />
+          {Number(d.rating).toFixed(1)}
+        </div>
+        <WishlistButton destinationId={d.id} />
       </div>
     </div>
     <div className="p-5 space-y-3">

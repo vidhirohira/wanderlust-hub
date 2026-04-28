@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapPin, Building2, UtensilsCrossed, Users, Map, Star } from "lucide-react";
+import { MapPin, Building2, Users, Map as MapIcon, Star } from "lucide-react";
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ const Overview = () => {
       });
 
       const bucket = (rows: { created_at: string }[] | null, days: number) => {
-        const map = new Map<string, number>();
+        const map = new globalThis.Map<string, number>();
         for (let i = days - 1; i >= 0; i--) {
           const d = new Date(Date.now() - i * 86400000);
           map.set(d.toISOString().slice(5, 10), 0);
@@ -55,7 +55,7 @@ const Overview = () => {
         <Stat icon={Users} label="Users" value={stats.users} tone="primary" />
         <Stat icon={MapPin} label="Destinations" value={stats.destinations} tone="accent" />
         <Stat icon={Building2} label="Hotels" value={stats.hotels} tone="nature" />
-        <Stat icon={Map} label="Tours" value={stats.tours} tone="beach" />
+        <Stat icon={MapIcon} label="Tours" value={stats.tours} tone="beach" />
         <Stat icon={Star} label="Reviews" value={stats.reviews} tone="primary" />
       </div>
 

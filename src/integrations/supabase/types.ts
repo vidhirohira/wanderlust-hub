@@ -67,6 +67,7 @@ export type Database = {
       }
       hotels: {
         Row: {
+          address: string | null
           amenities: string[] | null
           city: string
           contact: string | null
@@ -74,11 +75,14 @@ export type Database = {
           id: string
           name: string
           near: string | null
+          near_destination: string | null
           price_per_night: number
           rating: number
+          state: string | null
           type: string
         }
         Insert: {
+          address?: string | null
           amenities?: string[] | null
           city: string
           contact?: string | null
@@ -86,11 +90,14 @@ export type Database = {
           id?: string
           name: string
           near?: string | null
+          near_destination?: string | null
           price_per_night: number
           rating?: number
+          state?: string | null
           type: string
         }
         Update: {
+          address?: string | null
           amenities?: string[] | null
           city?: string
           contact?: string | null
@@ -98,14 +105,47 @@ export type Database = {
           id?: string
           name?: string
           near?: string | null
+          near_destination?: string | null
           price_per_night?: number
           rating?: number
+          state?: string | null
           type?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
       restaurants: {
         Row: {
+          address: string | null
           city: string
           contact: string | null
           created_at: string
@@ -117,6 +157,7 @@ export type Database = {
           specialty: string | null
         }
         Insert: {
+          address?: string | null
           city: string
           contact?: string | null
           created_at?: string
@@ -128,6 +169,7 @@ export type Database = {
           specialty?: string | null
         }
         Update: {
+          address?: string | null
           city?: string
           contact?: string | null
           created_at?: string
@@ -137,6 +179,140 @@ export type Database = {
           price_range?: string
           rating?: number
           specialty?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          destination_id: string
+          id: string
+          rating: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          destination_id: string
+          id?: string
+          rating: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          destination_id?: string
+          id?: string
+          rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scrape_queue: {
+        Row: {
+          created_at: string
+          id: string
+          query: string
+          reviewed_at: string | null
+          scraped_data: Json | null
+          status: string
+          triggered_by: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          query: string
+          reviewed_at?: string | null
+          scraped_data?: Json | null
+          status?: string
+          triggered_by?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          query?: string
+          reviewed_at?: string | null
+          scraped_data?: Json | null
+          status?: string
+          triggered_by?: string
+        }
+        Relationships: []
+      }
+      search_logs: {
+        Row: {
+          created_at: string
+          id: string
+          results_count: number
+          search_query: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          results_count?: number
+          search_query: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          results_count?: number
+          search_query?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      tour_plans: {
+        Row: {
+          created_at: string
+          destinations: string[]
+          end_date: string | null
+          estimated_budget: number
+          id: string
+          notes: string | null
+          num_people: number
+          start_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          destinations?: string[]
+          end_date?: string | null
+          estimated_budget?: number
+          id?: string
+          notes?: string | null
+          num_people?: number
+          start_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          destinations?: string[]
+          end_date?: string | null
+          estimated_budget?: number
+          id?: string
+          notes?: string | null
+          num_people?: number
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -197,6 +373,35 @@ export type Database = {
         }
         Relationships: []
       }
+      wishlists: {
+        Row: {
+          added_at: string
+          destination_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          destination_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          destination_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlists_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -211,7 +416,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "user" | "manager"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -339,7 +544,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["user", "manager"],
     },
   },
 } as const

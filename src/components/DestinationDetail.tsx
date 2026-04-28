@@ -4,6 +4,8 @@ import type { Destination } from "@/lib/types";
 import { resolveImage } from "@/lib/images";
 import { typeColorClasses } from "@/lib/typeColor";
 import { cn } from "@/lib/utils";
+import { WishlistButton } from "./WishlistButton";
+import { Reviews } from "./Reviews";
 
 type Props = {
   destination: Destination | null;
@@ -32,13 +34,16 @@ export const DestinationDetail = ({ destination: d, onOpenChange }: Props) => (
                 <MapPin className="h-4 w-4" /> {d.city}, {d.state}
               </p>
             </div>
-            <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-sm font-bold shadow-card">
-              <Star className="h-3.5 w-3.5 fill-accent text-accent" />
-              {d.rating}
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+              <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-sm font-bold shadow-card">
+                <Star className="h-3.5 w-3.5 fill-accent text-accent" />
+                {Number(d.rating).toFixed(1)}
+              </div>
+              <WishlistButton destinationId={d.id} variant="detail" />
             </div>
           </div>
 
-          <div className="p-6 md:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+          <div className="p-6 md:p-8 space-y-6 max-h-[65vh] overflow-y-auto">
             <p className="text-foreground/80 leading-relaxed">{d.description}</p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -63,6 +68,10 @@ export const DestinationDetail = ({ destination: d, onOpenChange }: Props) => (
                 </div>
               </div>
             )}
+
+            <div className="pt-4 border-t border-border">
+              <Reviews destinationId={d.id} />
+            </div>
           </div>
         </div>
       )}

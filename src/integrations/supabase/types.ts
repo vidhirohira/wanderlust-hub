@@ -26,6 +26,7 @@ export type Database = {
           image_url: string | null
           name: string
           rating: number
+          source: string
           state: string
           tags: string[] | null
           timings: string | null
@@ -42,6 +43,7 @@ export type Database = {
           image_url?: string | null
           name: string
           rating?: number
+          source?: string
           state: string
           tags?: string[] | null
           timings?: string | null
@@ -58,6 +60,7 @@ export type Database = {
           image_url?: string | null
           name?: string
           rating?: number
+          source?: string
           state?: string
           tags?: string[] | null
           timings?: string | null
@@ -278,6 +281,7 @@ export type Database = {
         Row: {
           created_at: string
           destinations: string[]
+          details: Json
           end_date: string | null
           estimated_budget: number
           id: string
@@ -291,6 +295,7 @@ export type Database = {
         Insert: {
           created_at?: string
           destinations?: string[]
+          details?: Json
           end_date?: string | null
           estimated_budget?: number
           id?: string
@@ -304,6 +309,7 @@ export type Database = {
         Update: {
           created_at?: string
           destinations?: string[]
+          details?: Json
           end_date?: string | null
           estimated_budget?: number
           id?: string

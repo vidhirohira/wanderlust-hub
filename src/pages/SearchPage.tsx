@@ -9,8 +9,13 @@ import { useAuth } from "@/hooks/useAuth";
 import type { Destination, Hotel, Restaurant, Transport, ScrapedDestination } from "@/lib/types";
 import { DestinationCard } from "@/components/DestinationCard";
 import { DestinationDetail } from "@/components/DestinationDetail";
+import { WishlistButton } from "@/components/WishlistButton";
 import { resolveImage } from "@/lib/images";
 import { cn } from "@/lib/utils";
+
+const WebWishlistBtn = ({ scraped }: { scraped: ScrapedDestination }) => (
+  <WishlistButton scraped={scraped} />
+);
 
 const SearchPage = () => {
   const [params, setParams] = useSearchParams();
@@ -207,7 +212,7 @@ const SearchPage = () => {
 
           {/* From the web */}
           {(scraping || scraped) && (
-            <Section icon={Globe} title="🌐 From the web" count={scraped?.length ?? 0}>
+            <Section icon={Globe} title="🌐 From the web (Wikipedia)" count={scraped?.length ?? 0}>
               {scraping && (
                 <div className="flex items-center gap-3 p-6 bg-secondary/40 rounded-2xl">
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
@@ -217,10 +222,13 @@ const SearchPage = () => {
               {!scraping && scraped && scraped.length > 0 && (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {scraped.map((s, i) => (
-                    <div key={i} className="bg-card border-2 border-dashed border-accent/40 rounded-2xl overflow-hidden shadow-soft">
+                    <div key={i} className="relative bg-card border-2 border-dashed border-accent/40 rounded-2xl overflow-hidden shadow-soft">
                       {s.image_url && (
-                        <div className="aspect-video bg-muted overflow-hidden">
+                        <div className="aspect-video bg-muted overflow-hidden relative">
                           <img src={s.image_url} alt={s.name} className="h-full w-full object-cover" />
+                          <div className="absolute top-3 right-3">
+                            <WebWishlistBtn scraped={s} />
+                          </div>
                         </div>
                       )}
                       <div className="p-4">
@@ -247,7 +255,7 @@ const SearchPage = () => {
               )}
               {!scraping && scraped && scraped.length === 0 && (
                 <p className="text-sm text-muted-foreground p-4 bg-secondary/40 rounded-2xl">
-                  Nothing found on the web either. Try a different query.
+                  No results found. Try searching for a specific Indian destination like "Manali" or "Coorg".
                 </p>
               )}
             </Section>
@@ -255,7 +263,9 @@ const SearchPage = () => {
 
           {totalDb === 0 && !scraping && !scraped && (
             <div className="text-center py-20 rounded-3xl bg-secondary/30">
-              <p className="text-muted-foreground">No matches.</p>
+              <p className="text-muted-foreground">
+                No results found. Try searching for a specific Indian destination like "Manali" or "Coorg".
+              </p>
             </div>
           )}
         </div>

@@ -5,21 +5,28 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import type { ScrapedDestination } from "@/lib/types";
 
-export const WishlistButton = ({
-  destinationId,
-  variant = "card",
-}: {
-  destinationId: string;
+type Props = {
+  destinationId?: string;
+  /** When provided, will save the scraped destination to DB on first wishlist */
+  scraped?: ScrapedDestination;
   variant?: "card" | "detail";
-}) => {
+};
+
+export const WishlistButton = ({ destinationId, scraped, variant = "card" }: Props) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [resolvedId, setResolvedId] = useState<string | undefined>(destinationId);
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    setResolvedId(destinationId);
+  }, [destinationId]);
+
+  useEffect(() => {
+    if (!user || !resolvedId) {
       setSaved(false);
       return;
     }
@@ -27,40 +34,95 @@ export const WishlistButton = ({
       .from("wishlists")
       .select("id")
       .eq("user_id", user.id)
-      .eq("destination_id", destinationId)
+      .eq("destination_id", resolvedId)
       .maybeSingle()
       .then(({ data }) => setSaved(!!data));
-  }, [user, destinationId]);
+  }, [user, resolvedId]);
+
+  const ensureScrapedSaved = async (): Promise<string | null> => {
+    if (resolvedId) return resolvedId;
+    if (!scraped) return null;
+
+    // Check if a destination with same name + city already exists
+    const { data: existing } = await supabase
+      .from("destinations")
+      .select("id")
+      .eq("name", scraped.name)
+      .eq("city", scraped.city)
+      .maybeSingle();
+
+    if (existing?.id) return (existing as { id: string }).id;
+
+    const { data: inserted, error } = await supabase
+      .from("destinations")
+      .insert({
+        name: scraped.name,
+        city: scraped.city,
+        state: scraped.state,
+        type: scraped.type,
+        description: scraped.description,
+        image_url: scraped.image_url,
+        entry_fee_indian: scraped.entry_fee_indian,
+        entry_fee_foreigner: scraped.entry_fee_foreigner,
+        timings: scraped.timings,
+        best_time: scraped.best_time,
+        tags: scraped.tags ?? [],
+        rating: scraped.rating ?? 4,
+        source: "web",
+      })
+      .select("id")
+      .single();
+    if (error) {
+      toast.error(error.message);
+      return null;
+    }
+    return (inserted as { id: string }).id;
+  };
 
   const toggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if (!user) {
-      toast("Login to save destinations", {
+      toast("Please login to save favourites", {
         action: { label: "Login", onClick: () => navigate("/auth") },
       });
       return;
     }
     setBusy(true);
-    if (saved) {
-      await supabase
-        .from("wishlists")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("destination_id", destinationId);
-      setSaved(false);
-      toast.success("Removed from wishlist");
-    } else {
-      const { error } = await supabase
-        .from("wishlists")
-        .insert({ user_id: user.id, destination_id: destinationId });
-      if (error) toast.error(error.message);
-      else {
-        setSaved(true);
-        toast.success("Saved to wishlist ❤");
+    try {
+      let id = resolvedId;
+      if (!id) {
+        const newId = await ensureScrapedSaved();
+        if (!newId) {
+          setBusy(false);
+          return;
+        }
+        id = newId;
+        setResolvedId(newId);
       }
+
+      if (saved) {
+        await supabase
+          .from("wishlists")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("destination_id", id);
+        setSaved(false);
+        toast.success("Removed from wishlist");
+      } else {
+        const { error } = await supabase
+          .from("wishlists")
+          .insert({ user_id: user.id, destination_id: id });
+        if (error) {
+          toast.error(error.message);
+        } else {
+          setSaved(true);
+          toast.success("Saved to your wishlist! ❤");
+        }
+      }
+    } finally {
+      setBusy(false);
     }
-    setBusy(false);
   };
 
   return (

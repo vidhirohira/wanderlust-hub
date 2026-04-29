@@ -1,6 +1,7 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
+import { ChatBot } from "./ChatBot";
 
 export const Layout = () => {
   return (
@@ -10,6 +11,7 @@ export const Layout = () => {
         <Outlet />
       </main>
       <Footer />
+      <ChatBot />
     </div>
   );
 };

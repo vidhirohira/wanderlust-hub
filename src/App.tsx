@@ -22,6 +22,7 @@ import ScrapeManager from "./pages/manager/ScrapeManager";
 import ManagerUsers from "./pages/manager/ManagerUsers";
 import Crud from "./pages/manager/Crud";
 import NotFound from "./pages/NotFound.tsx";
+import Landing from "./pages/Landing";
 
 const queryClient = new QueryClient();
 
@@ -33,8 +34,9 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/destinations" element={<Destinations />} />
               <Route path="/stays" element={<Stays />} />
               <Route path="/transport" element={<TransportPage />} />

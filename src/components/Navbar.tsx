@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const links = [
-  { to: "/", label: "Home" },
+  { to: "/home", label: "Home" },
   { to: "/destinations", label: "Destinations" },
   { to: "/stays", label: "Stays" },
   { to: "/transport", label: "Transport" },
@@ -42,6 +42,29 @@ export const Navbar = () => {
     toast.success("Signed out");
     navigate("/");
   };
+
+  // Manager logged in via hardcoded form
+  if (isManager && !user) {
+    return (
+      <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur-lg">
+        <div className="container flex h-16 items-center gap-4">
+          <Link to="/home" className="flex items-center gap-2 group shrink-0">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow shadow-card">
+              <MapPin className="h-5 w-5 text-primary-foreground" strokeWidth={2.5} />
+            </div>
+            <span className="font-display font-extrabold text-lg">TIMS</span>
+          </Link>
+          <div className="flex-1" />
+          <Button asChild variant="hero" size="sm">
+            <Link to="/manager"><LayoutDashboard className="h-4 w-4" /> Manager Dashboard</Link>
+          </Button>
+          <Button variant="ghost" size="sm" onClick={onSignOut}>
+            <LogOut className="h-4 w-4" /> Sign out
+          </Button>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur-lg">

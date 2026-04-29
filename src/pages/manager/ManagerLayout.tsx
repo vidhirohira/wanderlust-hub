@@ -23,7 +23,6 @@ const ManagerLayout = () => {
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
-  if (!user) return <Navigate to="/auth" replace />;
   if (!isManager) return <Navigate to="/" replace />;
 
   const onSignOut = async () => {
@@ -40,7 +39,7 @@ const ManagerLayout = () => {
             <div className="lg:sticky lg:top-24 bg-card rounded-2xl border border-border shadow-card p-4">
               <div className="px-3 py-2 mb-2">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">Manager</div>
-                <div className="text-sm font-semibold truncate">{user.email}</div>
+                <div className="text-sm font-semibold truncate">manager@tims.com</div>
               </div>
               <nav className="space-y-1">
                 {links.map((l) => (

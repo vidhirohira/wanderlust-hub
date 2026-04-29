@@ -36,7 +36,7 @@ const Home = () => {
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate(`/destinations?q=${encodeURIComponent(search)}`);
+    navigate(`/search?q=${encodeURIComponent(search)}`);
   };
 
   return (

@@ -21,9 +21,9 @@ const Auth = () => {
 
   useEffect(() => {
     if (!authLoading && user) {
-      navigate(isManager ? "/manager" : "/", { replace: true });
+      navigate("/home", { replace: true });
     }
-  }, [user, isManager, authLoading, navigate]);
+  }, [user, authLoading, navigate]);
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
